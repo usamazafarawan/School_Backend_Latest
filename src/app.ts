@@ -201,7 +201,7 @@ export const TOKEN_KEY="11223344";
 routes(app);
 
 // const url =`mongodb://127.0.0.1:27017/testSchooldb`;
-const url =`mongodb+srv://usama:usama@cluster0.y2fjq.mongodb.net/myApp?retryWrites=true&w=majority`;
+const url =`mongodb+srv://usama:usama@cluster0.y2fjq.mongodb.net/BGS_School?retryWrites=true&w=majority`;
 
 mongoose.connect(url)
 .then(() => {

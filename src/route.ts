@@ -9,6 +9,12 @@ export const routes = function (app: any): void {
     app.use('/api/studentAccount', require('./api/studentAccount'));
 
 
+    // new code
+
+    app.use('/api/auth', require('./api/signup'));
+
+
+
 
 
 

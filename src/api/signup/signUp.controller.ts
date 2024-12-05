@@ -1,5 +1,5 @@
 
-import signupForBGS from './signUp.model';
+import users from './signUp.model';
 import jwt from 'jsonwebtoken';
 import * as jwtTokenKey from '../../app'
 import bcrypt from 'bcryptjs'
@@ -11,12 +11,12 @@ import bcrypt from 'bcryptjs'
 export const create =  function (req, res) { 
   console.log("SIGNUP",req.body)
 
-  return  signupForBGS.findOne(  {$and :[{userName:req.body.userName} , 
+  return  users.findOne(  {$and :[{userName:req.body.userName} , 
    {isSchoolAuthority:req.body.isSchoolAuthority}]
    }).then((x)=>{
     console.log('x: ', x);
 if(!x){
-     return signupForBGS.create(req.body).then(response =>{
+     return users.create(req.body).then(response =>{
      const result={
        username:req.body.userName,
        password:req.body.password,
@@ -44,11 +44,11 @@ else{
 
 export const loginValidation=   function(req,res){
   console.log("Login",req.body)
-  return signupForBGS.findOne(  {$and :[{userName:req.body.userName} , 
-    {password:req.body.password},{isSchoolAuthority:req.body.isSchoolAuthority}]
-   }).then((x)=>{
-    console.log('x: ', x);
-if(!x){
+  return users.findOne(  {$and :[{email:req.body.email} , 
+    {password:req.body.password}]
+   }).then((user:any)=>{
+    console.log('user: ', user);
+if(!user){
   res.status(400).json({message:"User Name  / Password / School Authority is Wrong"}).end();
 }
 else{
@@ -64,9 +64,10 @@ else{
   );
 
   const reponse={
-    userName:req.body.userName,
-    password:req.body.password,
-    token:token,
+    userName:user.name,
+    userEmail:user.email,
+    userId:user._id,
+    authToken:token,
   }
   console.log("token", token)
   res.status(200).json(reponse).end();
