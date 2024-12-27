@@ -80,6 +80,13 @@ else{
 }
 
 
+export const getRecord=   function(req,res){
+  console.log("Login",req.body)
+  res.status(200).json({data:'sdsdsd'}).end();
+
+}
+
+
 // export const getRecord = function (req,res){
 //   console.log("params",req.query)
 //   console.log("body",req.body)
