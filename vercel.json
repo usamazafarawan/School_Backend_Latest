@@ -11,7 +11,7 @@
     ],
     "routes": [
       {
-        "src": "/api/signUp/login",
+        "src": "/api/auth/login",
         "dest": "src/app.ts"
       }
     ]
