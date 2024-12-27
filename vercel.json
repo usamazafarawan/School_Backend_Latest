@@ -5,7 +5,7 @@
     "version": 2,
     "builds": [
       {
-        "src": "src/app.ts",
+        "src": "dist/app.js",
         "use": "@vercel/node"
       }
     ],
@@ -13,7 +13,22 @@
       {
         "src": "/api/test",
         "dest": "/src/api/test.ts"
+      },
+      {
+        "src": "/api/signUp",
+        "dest": "/src/api/signup.ts"
+      },
+      {
+        "src": "/api/file",
+        "dest": "/src/api/uploadFeeStrucDoc.ts"
+      },
+      {
+        "src": "/api/studentRecord",
+        "dest": "/src/api/studentRecord.ts"
+      },
+      {
+        "src": "/api/studentAccount",
+        "dest": "/src/api/studentAccount.ts"
       }
-    
     ]
   }
