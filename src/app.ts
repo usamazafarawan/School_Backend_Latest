@@ -214,3 +214,5 @@ mongoose.connect(url)
 server.listen(port, () => {
 console.log(`Express server listening ${port}`);
 });
+
+export default app;
