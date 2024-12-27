@@ -6,16 +6,16 @@ export const routes = function (app: any): void {
     app.use('/api/test', (req, res) => res.send('BGS BACKEND'));
 
 
-    app.use('/api/signUp', require('./api/signup'));
-    app.use('/api/file', require('./api/uploadFeeStrucDoc'));
-    app.use('/api/studentRecord', require('./api/studentRecord'));
+    app.use('/api/signUp', require('./main_apis/signup'));
+    app.use('/api/file', require('./main_apis/uploadFeeStrucDoc'));
+    app.use('/api/studentRecord', require('./main_apis/studentRecord'));
 
-    app.use('/api/studentAccount', require('./api/studentAccount'));
+    app.use('/api/studentAccount', require('./main_apis/studentAccount'));
 
 
     // new code
 
-    app.use('/api/auth', require('./api/signup'));
+    app.use('/api/auth', require('./main_apis/signup'));
 
 
 

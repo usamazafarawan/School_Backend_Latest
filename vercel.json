@@ -12,12 +12,24 @@
     ],
     "routes": [
       {
-        "src": "/api/route",
-        "dest": "src/route.ts"
+        "src": "/api/test",
+        "dest": "/src/api/test.ts"
       },
       {
-        "src": "/",
-        "dest": "src/app.ts"
+        "src": "/api/signUp",
+        "dest": "/src/api/signup.ts"
+      },
+      {
+        "src": "/api/file",
+        "dest": "/src/api/uploadFeeStrucDoc.ts"
+      },
+      {
+        "src": "/api/studentRecord",
+        "dest": "/src/api/studentRecord.ts"
+      },
+      {
+        "src": "/api/studentAccount",
+        "dest": "/src/api/studentAccount.ts"
       }
     ]
   }
