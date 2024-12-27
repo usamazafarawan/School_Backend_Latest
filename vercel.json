@@ -12,7 +12,7 @@
     "routes": [
       {
         "src": "/api/test",           
-        "dest": "src/app.ts"       
+        "dest": "src/api/test.ts"       
       },
       {
         "src": "/api/signUp",
