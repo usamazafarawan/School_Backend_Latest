@@ -2,6 +2,10 @@ export const routes = function (app: any): void {
 
     // app.use('/api/recordinfo', require('./api/recordInfo'));
     // app.use('/api/libraryinfo', require('./api/libraryInfo'));
+
+    app.use('/api/test', (req, res) => res.send('BGS BACKEND'));
+
+
     app.use('/api/signUp', require('./api/signup'));
     app.use('/api/file', require('./api/uploadFeeStrucDoc'));
     app.use('/api/studentRecord', require('./api/studentRecord'));
