@@ -4,10 +4,6 @@
       {
         "src": "src/app.ts",
         "use": "@vercel/node"
-      },
-      {
-        "src": "src/route.ts",
-        "use": "@vercel/node"
       }
     ],
     "routes": [
