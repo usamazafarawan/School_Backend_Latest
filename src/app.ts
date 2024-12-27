@@ -198,6 +198,8 @@ export const TOKEN_KEY="11223344";
 
 
    app.use('/api/test', (req, res) => res.send('BGS BACKEND'));
+   app.use('/api/signUp', require('./main_apis/signup'));
+
 
 routes(app);
 
