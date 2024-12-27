@@ -15,8 +15,8 @@
         "dest": "src/app.ts"       
       },
       {
-        "src": "/api/signUp",
-        "dest": "/src/api/signup.ts"
+        "src": "/api/signUp/get",
+        "dest": "src/app.ts"
       },
       {
         "src": "/api/file",
