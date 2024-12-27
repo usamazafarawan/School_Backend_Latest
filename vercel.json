@@ -11,24 +11,8 @@
     ],
     "routes": [
       {
-        "src": "/api/test",           
-        "dest": "src/app.ts"       
-      },
-      {
-        "src": "/api/signUp/get",
+        "src": "/api/signUp/login",
         "dest": "src/app.ts"
-      },
-      {
-        "src": "/api/file",
-        "dest": "/src/api/uploadFeeStrucDoc.ts"
-      },
-      {
-        "src": "/api/studentRecord",
-        "dest": "/src/api/studentRecord.ts"
-      },
-      {
-        "src": "/api/studentAccount",
-        "dest": "/src/api/studentAccount.ts"
       }
     ]
   }
