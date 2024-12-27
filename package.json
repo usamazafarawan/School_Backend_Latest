@@ -7,7 +7,8 @@
     "start:watch": "nodemon src/app.ts",
     "start": " nodemon  src/app.ts",
     "lint": "eslint . --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

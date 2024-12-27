@@ -5,8 +5,13 @@
       "target": "es6",
       "moduleResolution": "node",
       "sourceMap": true,
-      "outDir": "dist"
+      "outDir": "dist",
+      "rootDir": "src", // Your source TypeScript files
     },
     "lib": ["es2015"],
-    "include": ["src/**/*"],  // Include all TypeScript files in the "src" folder and subfolders
-  }
+    "include": [
+      "src/**/*.ts" // This ensures TypeScript compiles everything inside the src folder
+    ],
+    "exclude": [
+      "node_modules"
+    ]  }

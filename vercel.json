@@ -5,14 +5,14 @@
     "version": 2,
     "builds": [
       {
-        "src": "src/**/*.ts",
+        "src": "src/**/*.ts",         
         "use": "@vercel/node"
       }
     ],
     "routes": [
       {
-        "src": "/api/test",
-        "dest": "/src/api/test.ts"
+        "src": "/api/(.*)",           
+        "dest": "/src/api/$1.ts"       
       },
       {
         "src": "/api/signUp",
