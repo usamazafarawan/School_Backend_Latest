@@ -1,4 +1,34 @@
 
 
-{ "version": 2, "builds": [{ "source": "src/app.ts", "destination": "/api" }] }
 
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "src/app.ts",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/test",
+        "dest": "src/api/test.ts"
+      },
+      {
+        "src": "/api/signUp",
+        "dest": "/src/api/signup.ts"
+      },
+      {
+        "src": "/api/file",
+        "dest": "/src/api/uploadFeeStrucDoc.ts"
+      },
+      {
+        "src": "/api/studentRecord",
+        "dest": "/src/api/studentRecord.ts"
+      },
+      {
+        "src": "/api/studentAccount",
+        "dest": "/src/api/studentAccount.ts"
+      }
+    ]
+  }
