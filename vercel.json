@@ -1,3 +1,4 @@
 
 
-{ "version": 2, "rewrites": [{ "source": "src/app.ts", "destination": "/api" }] }
+{ "version": 2, "builds": [{ "source": "src/app.ts", "destination": "/api" }] }
+
