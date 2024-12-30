@@ -49,7 +49,7 @@ export const loginValidation=   function(req,res){
    }).then((user:any)=>{
     console.log('user: ', user);
 if(!user){
-  res.status(400).json({message:"User Name  / Password / School Authority is Wrong"}).end();
+  res.status(400).json({statusCode:400, err:"User Name OR Password is Invalid"}).end();
 }
 else{
 
