@@ -13,6 +13,10 @@
       {
         "src": "/api/auth/login",
         "dest": "src/app.ts"
+      },
+      {
+        "src": "/api/(.*)",
+        "dest": "src/app.ts"
       }
     ]
   }
