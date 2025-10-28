@@ -57,6 +57,8 @@ export const TOKEN_KEY="11223344";
     * Vercel apis for live
     */
    app.use('/api/auth', require('./main_apis/signup'));
+   app.use('/api/students', require('./main_apis/students'));
+
 
 
 routes(app);

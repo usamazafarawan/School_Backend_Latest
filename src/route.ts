@@ -9,6 +9,8 @@ export const routes = function (app: any): void {
     // new code
 
     app.use('/api/auth', require('./main_apis/signup'));
+    app.use('/api/students', require('./main_apis/students'));
+
 
 
   }
