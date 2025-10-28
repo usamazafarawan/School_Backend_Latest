@@ -13,6 +13,7 @@ export interface IStudent {
   createdAt?: Date; // ✅ Added this line
   updatedAt?: Date;
   rollNo?: string;
+  isDeleted?:boolean;
   
 }
 
@@ -22,6 +23,7 @@ export interface IParent {
   secondary_phone?: string;
   cnic: string;
   address?: string;
+  isDeleted?:boolean;
 }
 
 export interface IStudentRecord extends Document {

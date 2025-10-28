@@ -10,7 +10,8 @@ const studentSchema = new Schema({
   admissionFee: { type: Number, required: true },
   academyFee: { type: Number, default: 0 },
   totalFee: { type: Number, required: true },
-      rollNo: { type: String, unique: true }, // ✅ new field
+  rollNo: { type: String, unique: true }, // ✅ new field
+  isDeleted: { type: Boolean, default: false },
 },
   { timestamps: true } // ✅ this automatically adds createdAt & updatedAt
 );
@@ -31,7 +32,8 @@ const parentSchema = new Schema({
   phone: { type: String, required: true },
   secondary_phone: { type: String },
   cnic: { type: String, required: true },
-  address: { type: String }
+  address: { type: String },
+    isDeleted: { type: Boolean, default: false },
 });
 
 const studentRecordSchema = new Schema<IStudentRecord>(
