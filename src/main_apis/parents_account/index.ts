@@ -1,0 +1,17 @@
+import express from 'express';
+const router = express.Router();
+import * as controller from './parents_account.controller';
+
+
+router.post('/add-purchase', controller.addPurchase);
+router.get('/add-payment', controller.addPayment);
+router.get("/get-detail/:parentId", controller.getParentAccountDetails);
+
+
+
+
+
+
+
+export = router
+

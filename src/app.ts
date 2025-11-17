@@ -58,6 +58,7 @@ export const TOKEN_KEY="11223344";
     */
    app.use('/api/auth', require('./main_apis/signup'));
    app.use('/api/students', require('./main_apis/students'));
+   app.use('/api/parent-account', require('./main_apis/parents_account'));
 
 
 

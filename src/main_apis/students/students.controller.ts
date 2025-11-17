@@ -1,6 +1,6 @@
 
 import StudentRecord from './students.model';
-const { createTableForStudentAccount } = require('../studentAccount/studentAccount.controller');
+import ParentAccount from '../parents_account/parents_account.model';
 
 
 
@@ -41,9 +41,31 @@ export const createStudentAdmissionRecord = async (req, res) => {
 
     console.log("✅ Saved Student Record:", savedRecord);
 
+        // ➤ CALCULATE total admission + monthly fees for ALL students
+    const admissionTotal = students.reduce((sum, s) => sum + s.admissionFee, 0);
+    const monthlyTotal = students.reduce((sum, s) => sum + s.monthlyFee, 0);
+    const totalInitialDebit = admissionTotal + monthlyTotal;
+
+        // ➤ CREATE Parent Account
+    const account = new ParentAccount({
+      parentId: savedRecord._id,
+      totalDebit: totalInitialDebit,
+      balance: totalInitialDebit,
+      transactions: [
+        {
+          type: "DEBIT",
+          description: "Initial Admission + Monthly Fee",
+          amount: totalInitialDebit,
+        },
+      ],
+    });
+
+    await account.save();
+
     return res.status(201).json({
       message: "Student record created successfully",
       record: savedRecord,
+      account:account
     });
   } catch (error) {
     console.error("❌ Error creating student record:", error);
@@ -102,7 +124,7 @@ export const getAllStudentsWithParents = async (req, res) => {
           // academyFee: "$students.academyFee",
           // image: "$students.image",
 
-          // parentId: "$_id",
+          parentId: "$_id",
           parentName: "$parent.name",
           parentPhone: "$parent.phone",
 
