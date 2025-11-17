@@ -13,6 +13,7 @@ export interface IStudent {
   createdAt?: Date; // ✅ Added this line
   updatedAt?: Date;
   rollNo?: string;
+  hasLeftSchool?: boolean;
   isDeleted?:boolean;
   
 }
@@ -24,6 +25,7 @@ export interface IParent {
   cnic: string;
   address?: string;
   isDeleted?:boolean;
+  occupation?: string;
 }
 
 export interface IStudentRecord extends Document {
