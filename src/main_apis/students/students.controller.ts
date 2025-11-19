@@ -151,3 +151,55 @@ export const getAllStudentsWithParents = async (req, res) => {
     });
   }
 };
+
+
+export const getStudentDetailsById = async (req, res) => {
+  try {
+
+     const studentId = req.params.studentId;
+    console.log('studentId: ', studentId);
+
+    if (!studentId) {
+      return res.status(400).json({ message: "Student ID is required" });
+    }
+
+  
+   // Find the record containing that student
+    const record = await StudentRecord.findOne(
+      { "students._id": studentId },
+      {
+        parent: 1,
+        students: 1,
+        createdAt: 1,
+        updatedAt: 1
+      }
+    );
+
+    if (!record) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // Extract the student
+    const student = record.students.find((s:any) => s._id.toString() === studentId);
+
+     const parentData = {
+      ...record.parent, // convert Mongoose doc to plain object
+      _id: record._id || 'CUSTOM_ID' // replace _id with rollNo or any custom value
+    };
+
+    res.status(200).json({
+      message: "Student details",
+      parent: parentData,
+      student: student,
+      siblings: record.students.filter((s:any) => s._id.toString() !== studentId)
+    });
+
+
+  } catch (error) {
+    console.error("❌ Error fetching students:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
