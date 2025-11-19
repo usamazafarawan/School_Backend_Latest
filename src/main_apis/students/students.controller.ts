@@ -165,7 +165,7 @@ export const getStudentDetailsById = async (req, res) => {
 
   
    // Find the record containing that student
-    const record = await StudentRecord.findOne(
+    const record:any = await StudentRecord.findOne(
       { "students._id": studentId },
       {
         parent: 1,
@@ -181,15 +181,11 @@ export const getStudentDetailsById = async (req, res) => {
 
     // Extract the student
     const student = record.students.find((s:any) => s._id.toString() === studentId);
-
-     const parentData = {
-      ...record.parent, // convert Mongoose doc to plain object
-      _id: record._id || 'CUSTOM_ID' // replace _id with rollNo or any custom value
-    };
+    record.parent._id = record._id; // add parentId for reference
 
     res.status(200).json({
       message: "Student details",
-      parent: parentData,
+      parent: record.parent,
       student: student,
       siblings: record.students.filter((s:any) => s._id.toString() !== studentId)
     });
