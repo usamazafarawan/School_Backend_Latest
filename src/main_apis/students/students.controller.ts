@@ -199,3 +199,39 @@ export const getStudentDetailsById = async (req, res) => {
     });
   }
 };
+
+
+
+export const deleteStudentAccount = async (req, res) => {
+  try {
+
+     const studentId = req.body.studentId;
+
+    if (!studentId) {
+      return res.status(400).json({ message: "Student ID is required" });
+    }
+
+    const result: any = await StudentRecord.updateOne(
+      { "students._id": studentId },
+      {
+        $set: {
+          "students.$.isDeleted": true,
+          "students.$.updatedAt": new Date()
+        }
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Student soft-deleted successfully",
+      data: result
+    });
+
+  } catch (error) {
+    console.error("❌ Error in deleting student account:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
