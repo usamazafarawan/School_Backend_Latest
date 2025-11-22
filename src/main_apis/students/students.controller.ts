@@ -200,6 +200,97 @@ export const getStudentDetailsById = async (req, res) => {
   }
 };
 
+export const updateParentAndStudentRecord = async (req, res) => {
+  try {
+
+
+    const { parent, students } = req.body;
+
+    // 🔹 Basic validation
+    if (!parent || !students || !Array.isArray(students) || students.length === 0) {
+      return res.status(400).json({ message: "Invalid payload — parent or students missing" });
+    }
+
+    // new functionality to update parent and students
+
+      const recordId = parent._id; // Record and parent document share ID
+
+    // 1️⃣ Update parent
+    await StudentRecord.updateOne(
+      { _id: recordId },
+      { $set: { parent } }
+    );
+
+    const updates = [];
+    const newStudents = [];
+
+    for (const s of students) {
+
+      // 2️⃣ Existing student → update inside array
+      if (s.studentId) {
+
+        updates.push(
+          StudentRecord.updateOne(
+            { "students._id": s.studentId },
+            {
+              $set: {
+                "students.$.name": s.name,
+                "students.$.class": s.class,
+                "students.$.monthlyFee": s.monthlyFee,
+                "students.$.admissionFee": s.admissionFee,
+                "students.$.academyFee": s.academyFee,
+                "students.$.totalFee": s.totalFee,
+                "students.$.hasLeftSchool": s.hasLeftSchool,
+                "students.$.updatedAt": new Date()
+              }
+            }
+          )
+        );
+
+      } else {
+        // 3️⃣ NEW sibling → push into array
+        const prefix = s.class?.substring(0, 3).toUpperCase() || "STD";
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        const rollNo = `${prefix}-${randomNum}`;
+
+        newStudents.push({
+          ...s,
+          rollNo,
+          createdAt: new Date()
+        });
+      }
+    }
+
+    // 4️⃣ Push new siblings (if any)
+    if (newStudents.length > 0) {
+      updates.push(
+        StudentRecord.updateOne(
+          { _id: recordId },
+          { $push: { students: { $each: newStudents } } }
+        )
+      );
+    }
+
+    await Promise.all(updates);
+
+    return res.json({
+      success: true,
+      message: "Record updated successfully"
+    });
+
+
+
+
+
+  } catch (error) {
+    console.error("❌ Error in deleting student account:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
 
 
 export const deleteStudentAccount = async (req, res) => {
