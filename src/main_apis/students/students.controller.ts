@@ -123,11 +123,81 @@ export const getAllStudentsWithParents = async (req, res) => {
           hasAcademy: "$students.hasAcademy",
           // academyFee: "$students.academyFee",
           // image: "$students.image",
-
+          hasLeftSchool: "$students.hasLeftSchool",
           parentId: "$_id",
           parentName: "$parent.name",
           parentPhone: "$parent.phone",
 
+          sortOrder: 1, // keep for debugging (optional)
+        },
+      },
+
+      // Sort by the computed sort order
+      { $sort: { sortOrder: 1, name: 1 } },
+    ]);
+
+   return res.status(200).json({
+      data: {
+        totalStudents: students.length,
+        students,
+      },
+      message: "Students fetched successfully"
+    });
+  } catch (error) {
+    console.error("❌ Error fetching students:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+export const getClassStudents = async (req, res) => {
+  try {
+    const classOrder = [
+      "PG",
+      "Nursery",
+      "Prep",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten",
+    ];
+
+    const students = await StudentRecord.aggregate([
+      { $unwind: "$students" },
+      { $match: { 
+        "students.isDeleted": { $ne: true }, 
+        "students.hasLeftSchool": { $ne: true }
+      } },
+
+      // Add custom sort index based on your manual order
+      {
+        $addFields: {
+          sortOrder: {
+            $indexOfArray: [classOrder, "$students.class"],
+          },
+        },
+      },
+
+      // Project student + parent info
+      {
+        $project: {
+          _id: "$students._id",
+          name: "$students.name",
+          class: "$students.class",
+          rollNo: "$students.rollNo",
+          hasAcademy: "$students.hasAcademy",
+          hasLeftSchool: "$students.hasLeftSchool",
+          parentId: "$_id",
+          parentName: "$parent.name",
+          parentPhone: "$parent.phone",
           sortOrder: 1, // keep for debugging (optional)
         },
       },
