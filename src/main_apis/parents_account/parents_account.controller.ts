@@ -29,7 +29,7 @@ export const addPurchase = async (req, res) => {
 
 export const addPayment = async (req, res) => {
   try {
-    const { parentId, amount, description } = req.body;
+    const { parentId, amount, description, type } = req.body;
 
     const account = await ParentAccount.findOne({ parentId });
 
@@ -37,7 +37,7 @@ export const addPayment = async (req, res) => {
     account.balance = account.totalDebit - account.totalCredit;
 
     account.transactions.push({
-      type: "CREDIT",
+      type: type || "CREDIT",
       amount,
       description: description || "Payment Received"
     });

@@ -3,7 +3,7 @@ import { IParentAccount, IParentAccountModel } from "./parents_account.interface
 
 
 const transactionSchema = new Schema({
-  type: { type: String, enum: ["DEBIT", "CREDIT"], required: true }, 
+  type: { type: String, enum: ["DEBIT", "CREDIT","ElIMINATED"], required: true }, 
   // DEBIT = Amount parent has to pay (fee, purchases)
   // CREDIT = Amount parent paid (payment received)
 
