@@ -59,3 +59,43 @@ export const deleteExpense = async (req, res) => {
     res.status(500).json({ message: e.message });
   }
 };
+
+export const getExpenseById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const expense = await schoolExpenses.findById(id);
+
+    if (!expense) {
+      return res.status(404).json({ message: 'Expense not found' });
+    }
+
+    res.status(200).json({ expense });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
+export const updateExpense = async (req, res) => {
+  try {
+    const { id } = req.params; // get expense ID from URL
+    const updateData = req.body; // data sent from frontend
+
+    const updatedExpense = await schoolExpenses.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true } // return the updated document
+    );
+
+    if (!updatedExpense) {
+      return res.status(404).json({ message: "Expense not found" });
+    }
+
+    res.status(200).json({ message: "Expense updated", expense: updatedExpense });
+
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
+
