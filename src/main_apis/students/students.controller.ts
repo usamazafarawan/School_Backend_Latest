@@ -18,6 +18,16 @@ export const createStudentAdmissionRecord = async (req, res) => {
       return res.status(400).json({ message: "Invalid payload — parent or students missing" });
     }
 
+    // Remove _id if empty string
+    if (parent && parent._id === "") {
+      delete parent._id;
+    }
+
+    // Also remove studentId if empty
+    students.forEach(s => {
+      if (s.studentId === "") delete s.studentId;
+    });
+
     // 🔹 Generate random roll numbers for each student
     const studentsWithRollNos = students.map((s) => {
       const prefix = s.class?.substring(0, 3).toUpperCase() || "STD";
@@ -36,6 +46,9 @@ export const createStudentAdmissionRecord = async (req, res) => {
       parent,
       students: studentsWithRollNos,
     });
+
+          console.log('record: ', record);
+
 
     const savedRecord = await record.save();
 
