@@ -13,6 +13,10 @@ const expensesSchema = new mongoose.Schema({
   paidBy: {
     type: String,
   },
+  date:{
+    type: Date,
+    default: Date.now()
+  }
 }, { timestamps: true });
 
 export default model<IExpenses, IExpensesModel>("schoolExpenses", expensesSchema);

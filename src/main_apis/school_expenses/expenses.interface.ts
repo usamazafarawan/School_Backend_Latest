@@ -4,7 +4,8 @@ import { Model, Schema ,Document,Types  } from "mongoose";
 export interface IExpenses extends Document {
   amount: number;            
   description: string;           
-  paidBy: string;              
+  paidBy: string;  
+  date: string;            
   createdAt?: Date;
   updatedAt?: Date;
 }

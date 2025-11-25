@@ -5,12 +5,13 @@ import schoolExpenses from './expenses.model';
 
 export const addExpense = async (req, res) => {
   try {
-    const { amount, description, paidBy } = req.body;
+    const { amount, description, paidBy , date } = req.body;
 
     const expense = await schoolExpenses.create({
       amount,
       description,
-      paidBy
+      paidBy,
+      date
     });
 
     res.status(200).json({ message: "Expense added", expense });
@@ -31,7 +32,7 @@ export const getExpenses = async (req, res) => {
     end.setHours(23, 59, 59, 999);
 
     const expenses = await schoolExpenses.find({
-      createdAt: {
+      date: {
         $gte: start,
         $lte: end
       }
