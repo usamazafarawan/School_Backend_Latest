@@ -57,7 +57,9 @@ export const createStudentAdmissionRecord = async (req, res) => {
         // ➤ CALCULATE total admission + monthly fees for ALL students
     const admissionTotal = students.reduce((sum, s) => sum + s.admissionFee, 0);
     const monthlyTotal = students.reduce((sum, s) => sum + s.monthlyFee, 0);
-    const totalInitialDebit = admissionTotal + monthlyTotal;
+
+    const academyFee = students.reduce((sum, s) => sum + (s.hasAcademy ? s.academyFee : 0), 0);
+    const totalInitialDebit = admissionTotal + monthlyTotal + academyFee;
 
         // ➤ CREATE Parent Account
     const account = new ParentAccount({
@@ -128,6 +130,7 @@ export const getAllStudentsWithParents = async (req, res) => {
           _id: "$students._id",
           name: "$students.name",
           class: "$students.class",
+          gender: "$students.gender",
           rollNo: "$students.rollNo",
           // monthlyFee: "$students.monthlyFee",
           // admissionFee: "$students.admissionFee",
@@ -205,6 +208,7 @@ export const getClassStudents = async (req, res) => {
           _id: "$students._id",
           name: "$students.name",
           class: "$students.class",
+          gender:"$students.gender",
           rollNo: "$students.rollNo",
           hasAcademy: "$students.hasAcademy",
           hasLeftSchool: "$students.hasLeftSchool",
@@ -319,6 +323,7 @@ export const updateParentAndStudentRecord = async (req, res) => {
               $set: {
                 "students.$.name": s.name,
                 "students.$.class": s.class,
+                "students.$.gender": s.gender,
                 "students.$.monthlyFee": s.monthlyFee,
                 "students.$.admissionFee": s.admissionFee,
                 "students.$.academyFee": s.academyFee,

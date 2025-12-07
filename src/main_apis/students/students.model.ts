@@ -4,6 +4,7 @@ import { IStudentRecord,IStudentRecordModel  } from "./students.interface";
 const studentSchema = new Schema({
   name: { type: String, required: true },
   class: { type: String, required: true },
+  gender: { type: String, required: true, default: "boy" },
   image: { type: String, default: null },
   hasAcademy: { type: Boolean, default: false },
   monthlyFee: { type: Number, required: true },

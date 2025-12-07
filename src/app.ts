@@ -67,7 +67,8 @@ export const TOKEN_KEY="11223344";
 routes(app);
 
 // const url =`mongodb://127.0.0.1:27017/testSchooldb`;
-const url =`mongodb+srv://usama:usama@cluster0.y2fjq.mongodb.net/BGS_School?retryWrites=true&w=majority`;
+const url =`mongodb+srv://usama:usama@cluster0.y2fjq.mongodb.net/BGS_Origional_Data?retryWrites=true&w=majority`;  // Original DB
+// const url =`mongodb+srv://usama:usama@cluster0.y2fjq.mongodb.net/BGS_School?retryWrites=true&w=majority`;    // testing DB 
 
 mongoose.connect(url)
 .then(() => {

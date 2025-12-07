@@ -4,6 +4,7 @@ import { Model, Schema ,Document } from "mongoose";
 export interface IStudent {
   name: string;
   class: string;
+  gender: string;
   image?: string | null;
   hasAcademy: boolean;
   monthlyFee: number;
