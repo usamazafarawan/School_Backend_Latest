@@ -84,7 +84,8 @@ export const getParentAccountDetails = async (req, res) => {
 
 export const updateTransactionRecord = async (req, res) => {
   try {
-    const { _id, amount, description, type } = req.body;
+    const { _id, amount, description, type , parentId } = req.body;
+    console.log('parentId: ', parentId);
     console.log('type: ', type);
     console.log('description: ', description);
     console.log('amount: ', amount);
