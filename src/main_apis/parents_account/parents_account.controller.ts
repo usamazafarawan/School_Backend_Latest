@@ -54,7 +54,6 @@ export const addPayment = async (req, res) => {
 export const getParentAccountDetails = async (req, res) => {
   try {
     const parentId = req.params.parentId;
-    console.log('parentId: ', parentId);
 
     if (!parentId) {
       return res.status(400).json({ message: "Parent ID is required" });
@@ -82,3 +81,39 @@ export const getParentAccountDetails = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const updateTransactionRecord = async (req, res) => {
+  try {
+    const { _id, amount, description, type } = req.body;
+    console.log('type: ', type);
+    console.log('description: ', description);
+    console.log('amount: ', amount);
+    console.log('_id: ', _id);
+
+    if (!_id) {
+      return res.status(400).json({ message: "Transaction ID is required" });
+    }
+
+    // // Fetch account
+    // const account = await ParentAccount.findOne({ parentId });
+
+    // if (!account) {
+    //   return res.status(404).json({ message: "Account not found" });
+    // }
+
+    // // Fetch parent + children info
+    // const record = await StudentRecord.findById(parentId);
+
+    return res.status(200).json({
+      message: "Transaction updated successfully",
+      // parent: record.parent,
+      // students: record.students,
+      // account: account
+    });
+
+  } catch (error) {
+    console.error("Error in Updating Transaction:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
