@@ -136,3 +136,60 @@ export const updateTransactionRecord = async (req, res) => {
   }
 };
 
+
+export const deleteTransactionRecord = async (req, res) => {
+  try {
+    const { _id, parentId } = req.body;
+
+    if (!_id || !parentId) {
+      return res.status(400).json({ message: "Transaction ID and parentId are required" });
+    }
+
+    // STEP 1: Fetch parent account by parentId
+    const account = await ParentAccount.findOne({ parentId: parentId });
+
+    if (!account) {
+      return res.status(404).json({ message: "Account not found" });
+    }
+
+    // STEP 2: Remove the transaction from the transactions array
+    const transactionIndex = account.transactions.findIndex(
+      (t: any) => t._id.toString() === _id
+    );
+
+    if (transactionIndex === -1) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
+    // Remove the transaction
+    account.transactions.splice(transactionIndex, 1);
+
+    // STEP 3: Recalculate totals
+    let totalDebit = 0;
+    let totalCredit = 0;
+
+    account.transactions.forEach(t => {
+      if (t.type === "DEBIT") totalDebit += t.amount;
+      if (t.type === "CREDIT") totalCredit += t.amount;
+      if (t.type === "ElIMINATED") totalCredit += t.amount; // treat as credit if needed
+    });
+
+    account.totalDebit = totalDebit;
+    account.totalCredit = totalCredit;
+    account.balance = totalDebit - totalCredit;
+
+    // STEP 4: Save the updated account
+    await account.save();
+
+    return res.status(200).json({
+      message: "Transaction deleted successfully",
+    });
+
+  } catch (error) {
+    console.error("Error deleting transaction:", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
+
