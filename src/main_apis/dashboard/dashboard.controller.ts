@@ -13,9 +13,7 @@ export const getDashboardData = async (req, res) => {
 
     // Convert to real date objects
     const start = new Date(startDate);
-    console.log('start: ', start);
     const end = new Date(endDate);
-    console.log('end: ', end);
     
     // Include full day of endDate
     end.setHours(23, 59, 59, 999);

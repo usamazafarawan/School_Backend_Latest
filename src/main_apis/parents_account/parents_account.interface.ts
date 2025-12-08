@@ -1,7 +1,7 @@
 import { Model, Schema ,Document,Types  } from "mongoose";
 
 export interface ITransaction {
-  type: "DEBIT" | "CREDIT";  
+  type: "DEBIT" | "CREDIT" | "ElIMINATED";  
   description: string;
   amount: number;
   date?: Date;

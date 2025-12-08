@@ -84,37 +84,55 @@ export const getParentAccountDetails = async (req, res) => {
 
 export const updateTransactionRecord = async (req, res) => {
   try {
-    const { _id, amount, description, type , parentId } = req.body;
-    console.log('parentId: ', parentId);
-    console.log('type: ', type);
-    console.log('description: ', description);
-    console.log('amount: ', amount);
-    console.log('_id: ', _id);
+    const { _id, amount, description, parentId } = req.body;
 
-    if (!_id) {
-      return res.status(400).json({ message: "Transaction ID is required" });
+    if (!_id || !parentId) {
+      return res.status(400).json({ message: "Transaction ID and parentId are required" });
     }
 
-    // // Fetch account
-    // const account = await ParentAccount.findOne({ parentId });
+    // STEP 1: Fetch parent account
+    const account = await ParentAccount.findOne({ parentId: parentId });
+    console.log('account: ', account);
+    if (!account) {
+      return res.status(404).json({ message: "Account not found" });
+    }
 
-    // if (!account) {
-    //   return res.status(404).json({ message: "Account not found" });
-    // }
+    // STEP 2: Update the specific transaction
+    await ParentAccount.updateOne(
+      { parentId: parentId, "transactions._id": _id },
+      {
+        $set: {
+          "transactions.$.description": description,
+          "transactions.$.amount": amount
+        }
+      }
+    );
 
-    // // Fetch parent + children info
-    // const record = await StudentRecord.findById(parentId);
+    // STEP 3: Fetch updated account
+    const updatedAccount = await ParentAccount.findOne({ parentId: parentId });
+    let totalDebit = 0;
+    let totalCredit = 0;
+
+    updatedAccount.transactions.forEach(t => {
+      if (t.type === "DEBIT") totalDebit += t.amount;
+      if (t.type === "CREDIT") totalCredit += t.amount;
+      if (t.type === "ElIMINATED") totalCredit += t.amount;
+    });
+
+    updatedAccount.totalDebit = totalDebit;
+    updatedAccount.totalCredit = totalCredit;
+    updatedAccount.balance = totalDebit - totalCredit;
+
+    await updatedAccount.save();
 
     return res.status(200).json({
       message: "Transaction updated successfully",
-      // parent: record.parent,
-      // students: record.students,
-      // account: account
+      account: updatedAccount
     });
 
   } catch (error) {
-    console.error("Error in Updating Transaction:", error);
-    res.status(500).json({ message: error.message });
+    console.error("Error updating transaction:", error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
