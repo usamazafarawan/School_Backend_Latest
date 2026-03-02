@@ -31,9 +31,9 @@ studentSchema.pre("save", async function (next) {
 
 const parentSchema = new Schema({
   name: { type: String, required: true },
-  phone: { type: String, required: true },
+  phone: { type: String },
   secondary_phone: { type: String },
-  cnic: { type: String, required: true },
+  cnic: { type: String },
   address: { type: String },
   occupation: { type: String },
   isDeleted: { type: Boolean, default: false },
