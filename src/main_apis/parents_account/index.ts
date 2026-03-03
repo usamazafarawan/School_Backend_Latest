@@ -8,6 +8,7 @@ router.post('/add-payment', controller.addPayment);
 router.get("/get-detail/:parentId", controller.getParentAccountDetails);
 router.put("/update-transaction", controller.updateTransactionRecord);
 router.put("/delete-transaction", controller.deleteTransactionRecord);
+router.get("/getParentsWithStudentsDetails", controller.getParentsWithStudentsDetails);
 
 
 

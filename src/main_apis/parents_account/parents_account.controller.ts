@@ -191,5 +191,50 @@ export const deleteTransactionRecord = async (req, res) => {
   }
 };
 
+export const getParentsWithStudentsDetails = async (req, res) => {
+ try {
+    const data = await StudentRecord.aggregate([
+      {
+        $lookup: {
+          from: "parentaccounts", // collection name (lowercase + plural)
+          localField: "_id",
+          foreignField: "parentId",
+          as: "account"
+        }
+      },
+      {
+        $unwind: {
+          path: "$account",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $project: {
+          parentId: "$_id",
+          parentName: "$parent.name",
+          parentContact: "$parent.phone",
+          students: {
+            $map: {
+              input: "$students",
+              as: "student",
+              in: {
+                name: "$$student.name",
+                class: "$$student.class",
+              }
+            }
+          },
+          balance: { $ifNull: ["$account.balance", 0] }
+        }
+      }
+    ]);
+
+    res.status(200).json(data);
+
+  } catch (error) {
+    console.error("Error fetching parent account:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 
