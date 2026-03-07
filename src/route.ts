@@ -13,6 +13,7 @@ export const routes = function (app: any): void {
     app.use('/api/parent-account', require('./main_apis/parents_account'));
     app.use('/api/expense', require('./main_apis/school_expenses'));
     app.use('/api/dashboard', require('./main_apis/dashboard'));
+    app.use('/api/academy-students', require('./main_apis/academy'));
 
 
 
