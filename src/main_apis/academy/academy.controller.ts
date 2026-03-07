@@ -20,7 +20,7 @@ export const getSchoolAcademyStudents = async (req, res) => {
       {
         $project: {
           _id: 0,
-          parentId: "$parent._id",   // ✅ parent id
+          parentId: "$_id",   // ✅ parent id
           parentName: "$parent.name",
           parentPhone: "$parent.phone",
           studentId: "$students._id", // optional but useful
