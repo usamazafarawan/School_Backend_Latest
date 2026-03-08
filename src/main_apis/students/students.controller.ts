@@ -1,6 +1,7 @@
 
 import StudentRecord from './students.model';
 import ParentAccount from '../parents_account/parents_account.model';
+import AcademyStudentRecord from '../academy/academy.model';
 
 
 
@@ -252,7 +253,32 @@ export const getStudentDetailsById = async (req, res) => {
 
   
    // Find the record containing that student
-    const record:any = await StudentRecord.findOne(
+    // const record:any = await StudentRecord.findOne(
+    //   { "students._id": studentId },
+    //   {
+    //     parent: 1,
+    //     students: 1,
+    //     createdAt: 1,
+    //     updatedAt: 1
+    //   }
+    // );
+
+    // if (!record) {
+    //   return res.status(404).json({ message: "Student not found" });
+    // }
+
+    // // Extract the student
+    // const student = record.students.find((s:any) => s._id.toString() === studentId);
+    // record.parent._id = record._id; // add parentId for reference
+
+    // res.status(200).json({
+    //   message: "Student details",
+    //   parent: record.parent,
+    //   student: student,
+    //   siblings: record.students.filter((s:any) => s._id.toString() !== studentId)
+    // });
+
+    let record: any = await StudentRecord.findOne(
       { "students._id": studentId },
       {
         parent: 1,
@@ -262,19 +288,42 @@ export const getStudentDetailsById = async (req, res) => {
       }
     );
 
+    let category = "school";
+
+    if (!record) {
+
+      record = await AcademyStudentRecord.findOne(
+        { "students._id": studentId },
+        {
+          parent: 1,
+          students: 1,
+          createdAt: 1,
+          updatedAt: 1
+        }
+      );
+
+      category = "academy";
+    }
+
     if (!record) {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    // Extract the student
-    const student = record.students.find((s:any) => s._id.toString() === studentId);
-    record.parent._id = record._id; // add parentId for reference
+    // Extract student
+    const student = record.students.find(
+      (s: any) => s._id.toString() === studentId
+    );
+
+    record.parent._id = record._id;
 
     res.status(200).json({
       message: "Student details",
       parent: record.parent,
       student: student,
-      siblings: record.students.filter((s:any) => s._id.toString() !== studentId)
+      siblings: record.students.filter(
+        (s: any) => s._id.toString() !== studentId
+      ),
+      category
     });
 
 

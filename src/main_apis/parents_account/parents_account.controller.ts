@@ -1,6 +1,7 @@
 
 import ParentAccount from './parents_account.model';
 import StudentRecord from '../students/students.model';
+import AcademyStudentRecord from '../academy/academy.model';
 
 
 
@@ -67,13 +68,26 @@ export const getParentAccountDetails = async (req, res) => {
     }
 
     // Fetch parent + children info
-    const record = await StudentRecord.findById(parentId);
+    let record = await StudentRecord.findById(parentId);
+    let category = "school";
+
+    if (!record) {
+      record = await AcademyStudentRecord.findById(parentId);
+      category = "academy";
+    }
+
+    if (!record) {
+      return res.status(404).json({
+        message: "Parent not found"
+      });
+    }
 
     return res.status(200).json({
       message: "Parent account fetched successfully",
       parent: record.parent,
       students: record.students,
-      account: account
+      account: account,
+      category
     });
 
   } catch (error) {
