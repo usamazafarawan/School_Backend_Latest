@@ -125,6 +125,7 @@ export const getSchoolAcademyStudents = async (req, res) => {
           parentName: "$parent.name",
           parentPhone: "$parent.phone",
           category: 'Academy',
+          academyFee: "$students.totalFee",
           sortOrder: 1, // keep for debugging (optional)
         },
       },
@@ -179,6 +180,142 @@ export const deleteStudentAccount = async (req, res) => {
       message: "Student soft-deleted successfully",
       data: result
     });
+
+  } catch (error) {
+    console.error("❌ Error in deleting student account:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+export const getStudentDetailsById = async (req, res) => {
+  try {
+
+    const studentId = req.params.studentId;
+    console.log('studentId: ', studentId);
+
+    if (!studentId) {
+      return res.status(400).json({ message: "Student ID is required" });
+    }
+
+    let record: any = await AcademyStudentRecord.findOne(
+      { "students._id": studentId },
+      {
+        parent: 1,
+        students: 1,
+        createdAt: 1,
+        updatedAt: 1
+      }
+    );
+
+    if (!record) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // Extract student
+    const student = record.students.find(
+      (s: any) => s._id.toString() === studentId
+    );
+
+    record.parent._id = record._id;
+
+    res.status(200).json({
+      message: "Student details",
+      parent: record.parent,
+      student: student,
+      siblings: record.students.filter(
+        (s: any) => s._id.toString() !== studentId
+      ),
+    });
+
+
+  } catch (error) {
+    console.error("❌ Error fetching students:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+export const updateParentAndStudentRecord = async (req, res) => {
+  try {
+
+
+    const { parent, students } = req.body;
+    console.log('students: ', students);
+
+    // 🔹 Basic validation
+    if (!parent || !students || !Array.isArray(students) || students.length === 0) {
+      return res.status(400).json({ message: "Invalid payload — parent or students missing" });
+    }
+
+    // new functionality to update parent and students
+
+      const recordId = parent._id; // Record and parent document share ID
+
+    // 1️⃣ Update parent
+    await AcademyStudentRecord.updateOne(
+      { _id: recordId },
+      { $set: { parent } }
+    );
+
+    const updates = [];
+    const newStudents = [];
+
+    for (const s of students) {
+
+      // 2️⃣ Existing student → update inside array
+      if (s.studentId) {
+
+        updates.push(
+          AcademyStudentRecord.updateOne(
+            { "students._id": s.studentId },
+            {
+              $set: {
+                "students.$.name": s.name,
+                "students.$.class": s.class,
+                "students.$.gender": s.gender,
+                "students.$.monthlyFee": s.monthlyFee,
+                "students.$.totalFee": s.totalFee,
+                "students.$.hasLeftAcademy": s.hasLeftAcademy,
+                "students.$.updatedAt": new Date()
+              }
+            }
+          )
+        );
+
+      } else {
+
+        newStudents.push({
+          ...s,
+          createdAt: new Date()
+        });
+      }
+    }
+
+    // 4️⃣ Push new siblings (if any)
+    if (newStudents.length > 0) {
+      updates.push(
+        AcademyStudentRecord.updateOne(
+          { _id: recordId },
+          { $push: { students: { $each: newStudents } } }
+        )
+      );
+    }
+
+    await Promise.all(updates);
+
+    return res.json({
+      success: true,
+      message: "Record updated successfully"
+    });
+
+
+
+
 
   } catch (error) {
     console.error("❌ Error in deleting student account:", error);
